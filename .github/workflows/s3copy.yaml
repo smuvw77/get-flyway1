@@ -1,7 +1,12 @@
 name: Upload new SQL files_to_S3
 
 on:
-  push:
+  workflow_dispatch:
+    inputs:
+      s3_bucket:
+        description: 'Enter the S3 bucket name (optional)'
+        required: required
+        type: string
     paths:
       - 'sql/**'
 jobs:
@@ -22,7 +27,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
       - name: Use environment secret
-        run: echo "${{ secrets.BUCKET_NAME }}"
+        run: echo "${{ s3_bucket }}"
 
       - name: Get added SQL files only
         id: detect
@@ -42,5 +47,5 @@ jobs:
         run: |
           while IFS= read -r file; do
             echo "Uploading $file to S3..."
-            aws s3 cp "$file" "s3://${{ secrets.BUCKET_NAME }}/$file"
+            aws s3 cp "$file" "s3://${{ s3_bucket }}/$file"
           done < added_files.txt
