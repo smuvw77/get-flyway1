@@ -10,6 +10,7 @@ jobs:
 
     env:
       AWS_REGION: us-east-1  # change to your region
+      BUCKET_NAME: sri031901
 
     steps:
       - name: Checkout repository
@@ -21,10 +22,10 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-      - name: Use environment secret
-        env:
-          BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-        run: echo "$BUCKET_NAME"
+      # - name: Use environment secret
+      #   env:
+      #     BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+      #   run: echo "$BUCKET_NAME"
 
       - name: Get added SQL files only
         id: detect
