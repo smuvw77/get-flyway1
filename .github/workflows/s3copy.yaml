@@ -4,8 +4,6 @@ on:
   push:
     paths:
       - 'sql/**'
-env:
-  BUCKET_NAME= sri031901
 jobs:
   upload-new-sql-files:
     runs-on: ubuntu-latest
