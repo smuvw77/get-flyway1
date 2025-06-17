@@ -48,6 +48,6 @@ jobs:
       #     done < added_files.txt
 
       - name: Upload added SQL files to S3
-          run: |
-            echo "Uploading file to S3..."
-            aws s3 sync sql/ "s3://$BUCKET_NAME/"
+        run: |
+          echo "Uploading file to S3..."
+          aws s3 sync sql/ "s3://$BUCKET_NAME/"
