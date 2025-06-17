@@ -26,19 +26,18 @@ jobs:
       #   env:
       #     BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
       #   run: echo "$BUCKET_NAME"
-
-      - name: Get added SQL files only
-        id: detect
-        run: |
-          git fetch origin ${{ github.event.before }}
-          git diff --diff-filter=A --name-only ${{ github.event.before }} ${{ github.sha }} \
-            | grep '^sql/.*\.sql$' > added_files.txt || true
+      # - name: Get added SQL files only
+      #   id: detect
+      #   run: |
+      #     git fetch origin ${{ github.event.before }}
+      #     git diff --diff-filter=A --name-only ${{ github.event.before }} ${{ github.sha }} \
+      #       | grep '^sql/.*\.sql$' > added_files.txt || true
           
-          if [[ -s added_files.txt ]]; then
-            echo "files_changed=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "files_changed=false" >> "$GITHUB_OUTPUT"
-          fi
+      #     if [[ -s added_files.txt ]]; then
+      #       echo "files_changed=true" >> "$GITHUB_OUTPUT"
+      #     else
+      #       echo "files_changed=false" >> "$GITHUB_OUTPUT"
+      #     fi
 
       # - name: Upload added SQL files to S3
       #   if: steps.detect.outputs.files_changed == 'true'
@@ -48,7 +47,7 @@ jobs:
       #       aws s3 cp "$file" "s3://$BUCKET_NAME/$file"
       #     done < added_files.txt
 
-        - name: Upload added SQL files to S3
+      - name: Upload added SQL files to S3
           run: |
             echo "Uploading file to S3..."
             aws s3 sync sql/ "s3://$BUCKET_NAME/"
