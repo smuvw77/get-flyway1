@@ -4,7 +4,8 @@ on:
   push:
     paths:
       - 'sql/**'
-
+env:
+  BUCKET_NAME= sri031901
 jobs:
   upload-new-sql-files:
     runs-on: ubuntu-latest
@@ -22,6 +23,8 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+      - name: Use environment secret
+        run: echo "${{ secrets.BUCKET_NAME }}"
 
       - name: Get added SQL files only
         id: detect
@@ -41,5 +44,5 @@ jobs:
         run: |
           while IFS= read -r file; do
             echo "Uploading $file to S3..."
-            aws s3 cp "$file" "s3://sri031901/$file"
+            aws s3 cp "$file" "s3://${{secret.BUCKET_NAME}}/$file"
           done < added_files.txt
