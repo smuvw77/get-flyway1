@@ -40,10 +40,15 @@ jobs:
             echo "files_changed=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Upload added SQL files to S3
-        if: steps.detect.outputs.files_changed == 'true'
-        run: |
-          while IFS= read -r file; do
-            echo "Uploading $file to S3..."
-            aws s3 cp "$file" "s3://$BUCKET_NAME/$file"
-          done < added_files.txt
+      # - name: Upload added SQL files to S3
+      #   if: steps.detect.outputs.files_changed == 'true'
+      #   run: |
+      #     while IFS= read -r file; do
+      #       echo "Uploading $file to S3..."
+      #       aws s3 cp "$file" "s3://$BUCKET_NAME/$file"
+      #     done < added_files.txt
+
+        - name: Upload added SQL files to S3
+          run: |
+            echo "Uploading file to S3..."
+            aws s3 sync sql/ "s3://$BUCKET_NAME/"
